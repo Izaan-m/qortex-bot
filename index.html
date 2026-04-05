@@ -7,11 +7,7 @@
 <title>QORTEX BOT — EUR/USD M5</title>
 <link href="https://fonts.googleapis.com/css2?family=Space+Mono:wght@400;700&family=Rajdhani:wght@400;500;600;700&display=swap" rel="stylesheet">
 <style>
-:root {
-  --bg:#050a0f; --surface:#0a1520; --surface2:#0f1f30; --border:#1a3a5c;
-  --accent:#00d4ff; --accent2:#00ff9f; --red:#ff3366; --yellow:#ffd700;
-  --text:#c8dff0; --muted:#4a7a9b; --buy:#00ff9f; --sell:#ff3366;
-}
+:root{--bg:#050a0f;--surface:#0a1520;--surface2:#0f1f30;--border:#1a3a5c;--accent:#00d4ff;--accent2:#00ff9f;--red:#ff3366;--yellow:#ffd700;--text:#c8dff0;--muted:#4a7a9b;--buy:#00ff9f;--sell:#ff3366;}
 *{margin:0;padding:0;box-sizing:border-box;}
 body{background:var(--bg);color:var(--text);font-family:'Rajdhani',sans-serif;font-size:15px;min-height:100vh;overflow-x:hidden;}
 body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:radial-gradient(ellipse at 20% 20%,rgba(0,212,255,0.04) 0%,transparent 50%),radial-gradient(ellipse at 80% 80%,rgba(0,255,159,0.03) 0%,transparent 50%);pointer-events:none;z-index:0;}
@@ -29,13 +25,15 @@ body::before{content:'';position:fixed;top:0;left:0;right:0;bottom:0;background:
 .news-impact{font-size:10px;padding:1px 6px;border-radius:3px;font-weight:700;}
 .news-impact.high{background:rgba(255,51,102,0.2);color:var(--sell);}
 .news-impact.medium{background:rgba(255,215,0,0.2);color:var(--yellow);}
+.api-status{font-size:10px;padding:4px 10px;border-radius:6px;margin-bottom:8px;text-align:center;}
+.api-status.live{background:rgba(0,255,159,0.1);color:var(--buy);border:1px solid rgba(0,255,159,0.2);}
+.api-status.sim{background:rgba(255,215,0,0.1);color:var(--yellow);border:1px solid rgba(255,215,0,0.2);}
 .price-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:16px 18px;margin-bottom:10px;position:relative;overflow:hidden;}
 .price-card::before{content:'';position:absolute;top:0;left:0;right:0;height:2px;background:linear-gradient(90deg,transparent,var(--accent),transparent);}
 .pair-label{font-size:11px;color:var(--muted);letter-spacing:3px;text-transform:uppercase;margin-bottom:4px;}
 .price-main{font-family:'Space Mono',monospace;font-size:36px;font-weight:700;color:#fff;letter-spacing:-1px;line-height:1;}
 .price-change{font-size:13px;margin-top:4px;font-weight:600;}
-.price-change.up{color:var(--buy);}
-.price-change.down{color:var(--sell);}
+.price-change.up{color:var(--buy);}.price-change.down{color:var(--sell);}
 .price-meta{display:flex;gap:16px;margin-top:10px;padding-top:10px;border-top:1px solid var(--border);}
 .price-meta-item{flex:1;}
 .price-meta-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
@@ -59,7 +57,7 @@ canvas{width:100%;height:160px;display:block;border-radius:6px;}
 .ind-label{font-size:10px;color:var(--muted);letter-spacing:1px;text-transform:uppercase;}
 .ind-value{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;margin-top:4px;}
 .ind-state{font-size:10px;margin-top:2px;font-weight:600;}
-.bull{color:var(--buy);} .bear{color:var(--sell);} .neutral{color:var(--yellow);}
+.bull{color:var(--buy);}.bear{color:var(--sell);}.neutral{color:var(--yellow);}
 .pattern-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 18px;margin-bottom:10px;}
 .pattern-title{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:8px;}
 .pattern-list{display:flex;flex-wrap:wrap;gap:6px;}
@@ -86,14 +84,14 @@ canvas{width:100%;height:160px;display:block;border-radius:6px;}
 .quality-c{background:rgba(255,215,0,0.2);color:var(--yellow);}
 .confidence-bar{height:4px;background:var(--border);border-radius:2px;margin-top:10px;overflow:hidden;}
 .confidence-fill{height:100%;border-radius:2px;transition:width 0.8s ease;}
-.buy .confidence-fill{background:var(--buy);} .sell .confidence-fill{background:var(--sell);} .wait .confidence-fill{background:var(--muted);}
+.buy .confidence-fill{background:var(--buy);}.sell .confidence-fill{background:var(--sell);}.wait .confidence-fill{background:var(--muted);}
 .tpsl-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:10px;}
 .tpsl-title{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;}
 .tpsl-row{display:flex;justify-content:space-between;align-items:center;padding:6px 0;}
 .tpsl-row+.tpsl-row{border-top:1px solid var(--border);}
 .tpsl-name{font-size:12px;color:var(--muted);}
 .tpsl-value{font-family:'Space Mono',monospace;font-size:14px;}
-.tpsl-value.tp{color:var(--buy);} .tpsl-value.sl{color:var(--sell);} .tpsl-value.entry{color:var(--accent);}
+.tpsl-value.tp{color:var(--buy);}.tpsl-value.sl{color:var(--sell);}.tpsl-value.entry{color:var(--accent);}
 .confluence-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:14px 18px;margin-bottom:10px;}
 .conf-title{font-size:11px;color:var(--muted);letter-spacing:2px;text-transform:uppercase;margin-bottom:10px;display:flex;justify-content:space-between;}
 .conf-score{font-family:'Space Mono',monospace;font-size:11px;color:var(--accent);}
@@ -101,7 +99,7 @@ canvas{width:100%;height:160px;display:block;border-radius:6px;}
 .conf-item{display:flex;align-items:center;justify-content:space-between;padding:6px 8px;background:var(--surface2);border-radius:6px;font-size:11px;}
 .conf-name{color:var(--muted);}
 .conf-dot{width:8px;height:8px;border-radius:50%;flex-shrink:0;}
-.conf-dot.bull{background:var(--buy);box-shadow:0 0 6px var(--buy);} .conf-dot.bear{background:var(--sell);box-shadow:0 0 6px var(--sell);} .conf-dot.neutral{background:var(--yellow);}
+.conf-dot.bull{background:var(--buy);box-shadow:0 0 6px var(--buy);}.conf-dot.bear{background:var(--sell);box-shadow:0 0 6px var(--sell);}.conf-dot.neutral{background:var(--yellow);}
 .session-card{background:var(--surface);border:1px solid var(--border);border-radius:12px;padding:12px 18px;margin-bottom:10px;display:flex;align-items:center;justify-content:space-between;}
 .session-info{font-size:12px;color:var(--muted);}
 .session-name{font-size:14px;font-weight:600;color:var(--text);margin-top:2px;}
@@ -116,13 +114,13 @@ canvas{width:100%;height:160px;display:block;border-radius:6px;}
 .winrate-main{display:flex;align-items:center;justify-content:center;margin-bottom:14px;}
 .winrate-circle{width:100px;height:100px;border-radius:50%;display:flex;flex-direction:column;align-items:center;justify-content:center;border:3px solid var(--border);background:var(--surface2);}
 .winrate-pct{font-family:'Space Mono',monospace;font-size:24px;font-weight:700;line-height:1;}
-.winrate-pct.good{color:var(--buy);} .winrate-pct.bad{color:var(--sell);} .winrate-pct.neutral{color:var(--yellow);}
+.winrate-pct.good{color:var(--buy);}.winrate-pct.bad{color:var(--sell);}.winrate-pct.neutral{color:var(--yellow);}
 .winrate-label{font-size:10px;color:var(--muted);margin-top:2px;}
 .winrate-stats{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-bottom:12px;}
 .wstat{background:var(--surface2);border-radius:8px;padding:8px;text-align:center;}
 .wstat-label{font-size:10px;color:var(--muted);text-transform:uppercase;letter-spacing:1px;}
 .wstat-value{font-family:'Space Mono',monospace;font-size:14px;margin-top:4px;font-weight:700;}
-.wstat-value.green{color:var(--buy);} .wstat-value.red{color:var(--sell);} .wstat-value.blue{color:var(--accent);} .wstat-value.yellow{color:var(--yellow);}
+.wstat-value.green{color:var(--buy);}.wstat-value.red{color:var(--sell);}.wstat-value.blue{color:var(--accent);}.wstat-value.yellow{color:var(--yellow);}
 .winrate-bar-wrap{margin-bottom:10px;}
 .winrate-bar-label{display:flex;justify-content:space-between;font-size:11px;color:var(--muted);margin-bottom:4px;}
 .winrate-bar{height:8px;background:var(--border);border-radius:4px;overflow:hidden;display:flex;}
@@ -131,7 +129,7 @@ canvas{width:100%;height:160px;display:block;border-radius:6px;}
 .pip-tracker{display:flex;justify-content:space-between;align-items:center;padding:8px 0;border-top:1px solid var(--border);}
 .pip-label{font-size:12px;color:var(--muted);}
 .pip-value{font-family:'Space Mono',monospace;font-size:16px;font-weight:700;}
-.pip-value.positive{color:var(--buy);} .pip-value.negative{color:var(--sell);} .pip-value.blue{color:var(--accent);}
+.pip-value.positive{color:var(--buy);}.pip-value.negative{color:var(--sell);}.pip-value.blue{color:var(--accent);}
 .performance-grade{text-align:center;padding:8px;border-radius:8px;font-size:13px;font-weight:700;letter-spacing:2px;margin-top:8px;}
 .grade-a{background:rgba(0,255,159,0.1);color:var(--buy);border:1px solid rgba(0,255,159,0.3);}
 .grade-b{background:rgba(0,212,255,0.1);color:var(--accent);border:1px solid rgba(0,212,255,0.3);}
@@ -147,13 +145,11 @@ canvas{width:100%;height:160px;display:block;border-radius:6px;}
 .hist-time{color:var(--muted);font-size:11px;}
 .hist-conf{color:var(--text);font-size:11px;}
 .hist-result{font-size:11px;font-weight:600;}
-.hist-result.win{color:var(--buy);} .hist-result.loss{color:var(--sell);} .hist-result.pending{color:var(--yellow);}
+.hist-result.win{color:var(--buy);}.hist-result.loss{color:var(--sell);}.hist-result.pending{color:var(--yellow);}
 .refresh-btn{width:100%;padding:14px;background:linear-gradient(135deg,rgba(0,212,255,0.15),rgba(0,255,159,0.1));border:1px solid rgba(0,212,255,0.3);border-radius:12px;color:var(--accent);font-family:'Space Mono',monospace;font-size:13px;letter-spacing:2px;cursor:pointer;margin-bottom:10px;transition:all 0.3s ease;}
 .refresh-btn:active{transform:scale(0.98);}
 .reset-btn{width:100%;padding:10px;background:rgba(255,51,102,0.1);border:1px solid rgba(255,51,102,0.2);border-radius:10px;color:var(--sell);font-family:'Space Mono',monospace;font-size:11px;letter-spacing:2px;cursor:pointer;margin-bottom:10px;}
 .footer{text-align:center;padding:10px;font-size:10px;color:var(--muted);letter-spacing:1px;}
-.loading{animation:blink 1s infinite;}
-@keyframes blink{0%,100%{opacity:1}50%{opacity:0.3}}
 </style>
 </head>
 <body>
@@ -162,14 +158,15 @@ canvas{width:100%;height:160px;display:block;border-radius:6px;}
     <div class="logo">QORTEX<span>BOT</span></div>
     <div class="status-wrap"><div class="status-dot" id="statusDot"></div><span id="statusText">LIVE</span></div>
   </div>
+  <div id="apiStatus" class="api-status live">● LIVE PRICE FEED</div>
   <div class="news-banner" id="newsBanner">
     <div class="news-title">⚠ HIGH IMPACT NEWS — Trading Paused</div>
     <div id="newsList"></div>
   </div>
   <div class="price-card">
     <div class="pair-label">EUR / USD · M5</div>
-    <div class="price-main" id="priceMain">Loading...</div>
-    <div class="price-change" id="priceChange">—</div>
+    <div class="price-main" id="priceMain">1.08500</div>
+    <div class="price-change" id="priceChange">▲ 0.00000 (0.0000%)</div>
     <div class="price-meta">
       <div class="price-meta-item"><div class="price-meta-label">High</div><div class="price-meta-value" id="priceHigh">—</div></div>
       <div class="price-meta-item"><div class="price-meta-label">Low</div><div class="price-meta-value" id="priceLow">—</div></div>
@@ -254,19 +251,119 @@ canvas{width:100%;height:160px;display:block;border-radius:6px;}
     <div class="history-title">Signal History</div>
     <div id="historyList"><div style="color:var(--muted);font-size:12px;text-align:center;padding:10px;">No signals yet</div></div>
   </div>
-  <div class="footer">QORTEX BOT v3.0 · EUR/USD M5 · MEDIUM RISK · ALL FEATURES ENABLED</div>
+  <div class="footer">QORTEX BOT v3.1 · EUR/USD M5 · MEDIUM RISK</div>
 </div>
 <script>
+// ============================================================
+// QORTEX BOT v3.1 — INSTANT LOAD + ROBUST PRICE FETCHING
+// ============================================================
 const BASE='eur',QUOTE='usd';
 let candles=[],currentPrice=0,prevPrice=0,signalHistory=[],newsActive=false;
 let winRateData={wins:0,losses:0,pending:0,totalPips:0,confidenceSum:0,signalCount:0};
+let isLive=false;
 
+// KNOWN EUR/USD REALISTIC BASE PRICE — used as fallback
+const EURUSD_BASE = 1.0850;
+
+// ============================================================
 // STORAGE
+// ============================================================
 function saveData(){try{localStorage.setItem(‘qx_sig’,JSON.stringify(signalHistory));localStorage.setItem(‘qx_wr’,JSON.stringify(winRateData));}catch(e){}}
 function loadData(){try{const s=localStorage.getItem(‘qx_sig’),w=localStorage.getItem(‘qx_wr’);if(s)signalHistory=JSON.parse(s);if(w)winRateData=JSON.parse(w);}catch(e){}}
 function resetData(){if(!confirm(‘Reset all data?’))return;signalHistory=[];winRateData={wins:0,losses:0,pending:0,totalPips:0,confidenceSum:0,signalCount:0};saveData();updateWinRate();renderHistory();}
 
+// ============================================================
+// PRICE FETCHING — 5 sources with timeout + instant fallback
+// ============================================================
+async function fetchWithTimeout(url, timeout=4000){
+const controller=new AbortController();
+const id=setTimeout(()=>controller.abort(),timeout);
+try{
+const r=await fetch(url,{signal:controller.signal});
+clearTimeout(id);
+return r;
+}catch(e){clearTimeout(id);throw e;}
+}
+
+async function fetchPrice(){
+// Try multiple APIs with short timeouts
+const attempts=[
+async()=>{
+const r=await fetchWithTimeout(`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${BASE}.json`,3000);
+const d=await r.json();
+if(d[BASE]&&d[BASE][QUOTE])return parseFloat(d[BASE][QUOTE]);
+return null;
+},
+async()=>{
+const r=await fetchWithTimeout(`https://latest.currency-api.pages.dev/v1/currencies/${BASE}.json`,3000);
+const d=await r.json();
+if(d[BASE]&&d[BASE][QUOTE])return parseFloat(d[BASE][QUOTE]);
+return null;
+},
+async()=>{
+const r=await fetchWithTimeout(`https://api.frankfurter.app/latest?from=EUR&to=USD`,3000);
+const d=await r.json();
+if(d.rates&&d.rates.USD)return parseFloat(d.rates.USD);
+return null;
+},
+async()=>{
+const r=await fetchWithTimeout(`https://open.er-api.com/v6/latest/EUR`,3000);
+const d=await r.json();
+if(d.rates&&d.rates.USD)return parseFloat(d.rates.USD);
+return null;
+}
+];
+
+for(const attempt of attempts){
+try{
+const price=await attempt();
+if(price&&price>0.5&&price<2.0){
+isLive=true;
+updateAPIStatus(true);
+return price;
+}
+}catch(e){continue;}
+}
+
+// All APIs failed — use simulated price
+isLive=false;
+updateAPIStatus(false);
+return getSimulatedPrice();
+}
+
+function updateAPIStatus(live){
+const el=document.getElementById(‘apiStatus’);
+if(live){el.className=‘api-status live’;el.textContent=‘● LIVE PRICE FEED’;}
+else{el.className=‘api-status sim’;el.textContent=‘⚠ SIMULATED PRICE — APIs unavailable’;}
+}
+
+// ============================================================
+// SIMULATED REALISTIC PRICE (when APIs fail)
+// ============================================================
+let simPrice = EURUSD_BASE;
+let simTrend = 0;
+let simTrendCount = 0;
+
+function getSimulatedPrice(){
+// Realistic random walk based on EUR/USD volatility
+if(simTrendCount<=0){
+simTrend=(Math.random()-0.5)*0.0002;
+simTrendCount=Math.floor(3+Math.random()*8);
+}
+simTrendCount–;
+const noise=(Math.random()-0.5)*0.00015;
+simPrice=simPrice+simTrend+noise;
+// Keep within realistic bounds
+if(simPrice>1.1500)simPrice=1.1480;
+if(simPrice<1.0200)simPrice=1.0220;
+// Initialize from last known price if we have candles
+if(candles.length>0&&!isLive)simPrice=candles[candles.length-1].close+(simTrend+noise);
+return parseFloat(simPrice.toFixed(5));
+}
+
+// ============================================================
 // NEWS FILTER
+// ============================================================
 const NEWS=[
 {time:‘08:30’,name:‘EUR CPI Flash’,impact:‘high’,days:[1,2,3,4,5]},
 {time:‘10:00’,name:‘EUR PMI’,impact:‘medium’,days:[1,2,3,4,5]},
@@ -277,130 +374,99 @@ const NEWS=[
 {time:‘19:00’,name:‘Fed Speech’,impact:‘high’,days:[1,2,3,4,5]},
 ];
 function checkNews(){
-const now=new Date(),utcH=now.getUTCHours().toString().padStart(2,‘0’),utcM=now.getUTCMinutes().toString().padStart(2,‘0’),day=now.getUTCDay();
-const nowMins=parseInt(utcH)*60+parseInt(utcM);
+const now=new Date(),h=now.getUTCHours().toString().padStart(2,‘0’),m=now.getUTCMinutes().toString().padStart(2,‘0’),day=now.getUTCDay();
+const nowM=parseInt(h)*60+parseInt(m);
 const active=NEWS.filter(n=>{
 if(!n.days.includes(day))return false;
 const[nh,nm]=n.time.split(’:’).map(Number),nm2=nh*60+nm;
-return nowMins>=nm2-15&&nowMins<=nm2+30;
+return nowM>=nm2-15&&nowM<=nm2+30;
 });
 newsActive=active.length>0;
 const banner=document.getElementById(‘newsBanner’);
-if(newsActive){
-banner.classList.add(‘active’);
-document.getElementById(‘newsList’).innerHTML=active.map(n=>`<div class="news-item"><span>${n.name}</span><span class="news-impact ${n.impact}">${n.impact.toUpperCase()}</span></div>`).join(’’);
-} else {
-banner.classList.remove(‘active’);
-}
+if(newsActive){banner.classList.add(‘active’);document.getElementById(‘newsList’).innerHTML=active.map(n=>`<div class="news-item"><span>${n.name}</span><span class="news-impact ${n.impact}">${n.impact.toUpperCase()}</span></div>`).join(’’);}
+else banner.classList.remove(‘active’);
 }
 
-// PRICE
-async function fetchPrice(){
-const urls=[`https://cdn.jsdelivr.net/npm/@fawazahmed0/currency-api@latest/v1/currencies/${BASE}.json`,`https://latest.currency-api.pages.dev/v1/currencies/${BASE}.json`];
-for(const url of urls){try{const r=await fetch(url),d=await r.json();if(d[BASE]&&d[BASE][QUOTE])return parseFloat(d[BASE][QUOTE]);}catch(e){continue;}}
-return null;
-}
-
+// ============================================================
 // CANDLES
+// ============================================================
 function buildCandle(price){
 const now=Date.now(),ct=Math.floor(now/(5*60*1000))*(5*60*1000);
 if(!candles.length||candles[candles.length-1].time!==ct){
 const open=candles.length?candles[candles.length-1].close:price;
 candles.push({time:ct,open,high:price,low:price,close:price,volume:1});
 if(candles.length>100)candles.shift();
-} else {
-const c=candles[candles.length-1];
-c.high=Math.max(c.high,price);c.low=Math.min(c.low,price);c.close=price;c.volume++;
+}else{const c=candles[candles.length-1];c.high=Math.max(c.high,price);c.low=Math.min(c.low,price);c.close=price;c.volume++;}
 }
-}
+
 function seedCandles(price){
 if(candles.length>5)return;
-const m5=5*60*1000,now=Date.now(),v=0.0008;
-for(let i=50;i>=1;i–){
-const t=Math.floor((now-i*m5)/m5)*m5,base=price+(Math.random()-0.5)*0.006,range=v*(0.5+Math.random());
-const open=base+(Math.random()-0.495)*v,close=open+(Math.random()-0.48)*range;
-candles.push({time:t,open,high:Math.max(open,close)+Math.random()*range*0.4,low:Math.min(open,close)-Math.random()*range*0.4,close,volume:Math.floor(50+Math.random()*200)});
+const m5=5*60*1000,now=Date.now(),v=0.0006;
+let p=price;
+for(let i=60;i>=1;i–){
+const t=Math.floor((now-i*m5)/m5)*m5,range=v*(0.5+Math.random());
+const open=p+(Math.random()-0.495)*v*0.5,close=open+(Math.random()-0.48)*range;
+const high=Math.max(open,close)+Math.random()*range*0.3,low=Math.min(open,close)-Math.random()*range*0.3;
+candles.push({time:t,open,high,low,close,volume:Math.floor(50+Math.random()*200)});
+p=close;
 }
 }
 
+// ============================================================
 // INDICATORS
-function calcEMA(data,period){
-if(data.length<period)return data[data.length-1]||0;
-const k=2/(period+1);let ema=data.slice(0,period).reduce((a,b)=>a+b,0)/period;
-for(let i=period;i<data.length;i++)ema=data[i]*k+ema*(1-k);return ema;
+// ============================================================
+function calcEMA(d,p){if(d.length<p)return d[d.length-1]||0;const k=2/(p+1);let e=d.slice(0,p).reduce((a,b)=>a+b,0)/p;for(let i=p;i<d.length;i++)e=d[i]*k+e*(1-k);return e;}
+function calcRSI(c,p=14){if(c.length<p+1)return 50;let g=0,l=0;for(let i=c.length-p;i<c.length;i++){const d=c[i]-c[i-1];if(d>0)g+=d;else l-=d;}return 100-100/(1+(g/p)/((l/p)||0.001));}
+function calcMACD(c){
+if(c.length<35)return{macd:0,signal:0,hist:0};
+const ms=[];for(let i=26;i<=c.length;i++)ms.push(calcEMA(c.slice(0,i),12)-calcEMA(c.slice(0,i),26));
+const macd=ms[ms.length-1],signal=calcEMA(ms,9);return{macd,signal,hist:macd-signal};
 }
-function calcRSI(closes,period=14){
-if(closes.length<period+1)return 50;
-let g=0,l=0;
-for(let i=closes.length-period;i<closes.length;i++){const d=closes[i]-closes[i-1];if(d>0)g+=d;else l-=d;}
-return 100-100/(1+(g/period)/((l/period)||0.001));
-}
-function calcMACD(closes){
-if(closes.length<35)return{macd:0,signal:0,hist:0};
-const ms=[];
-for(let i=26;i<=closes.length;i++){ms.push(calcEMA(closes.slice(0,i),12)-calcEMA(closes.slice(0,i),26));}
-const macd=ms[ms.length-1],signal=calcEMA(ms,9);
-return{macd,signal,hist:macd-signal};
-}
-function calcBB(closes,period=20){
-if(closes.length<period)return{upper:0,mid:0,lower:0};
-const sl=closes.slice(-period),mid=sl.reduce((a,b)=>a+b,0)/period;
-const std=Math.sqrt(sl.map(x=>(x-mid)**2).reduce((a,b)=>a+b,0)/period);
-return{upper:mid+2*std,mid,lower:mid-2*std};
-}
-function calcStoch(cArr,period=14){
-if(cArr.length<period)return{k:50,d:50};
-const sl=cArr.slice(-period),high=Math.max(…sl.map(c=>c.high)),low=Math.min(…sl.map(c=>c.low)),close=cArr[cArr.length-1].close;
-const k=((close-low)/(high-low||0.0001))*100;return{k,d:k*0.8};
-}
-function calcATR(cArr,period=14){
-if(cArr.length<period+1)return 0.001;
-let sum=0;
-for(let i=cArr.length-period;i<cArr.length;i++){const c=cArr[i],p=cArr[i-1];sum+=Math.max(c.high-c.low,Math.abs(c.high-p.close),Math.abs(c.low-p.close));}
-return sum/period;
-}
-function calcWR(cArr,period=14){
-if(cArr.length<period)return-50;
-const sl=cArr.slice(-period),high=Math.max(…sl.map(c=>c.high)),low=Math.min(…sl.map(c=>c.low)),close=cArr[cArr.length-1].close;
-return((high-close)/(high-low||0.0001))*-100;
-}
-function calcSMA(closes,period){if(closes.length<period)return closes[closes.length-1]||0;return closes.slice(-period).reduce((a,b)=>a+b,0)/period;}
+function calcBB(c,p=20){if(c.length<p)return{upper:0,mid:0,lower:0};const s=c.slice(-p),m=s.reduce((a,b)=>a+b,0)/p,std=Math.sqrt(s.map(x=>(x-m)**2).reduce((a,b)=>a+b,0)/p);return{upper:m+2*std,mid:m,lower:m-2*std};}
+function calcStoch(ca,p=14){if(ca.length<p)return{k:50,d:50};const s=ca.slice(-p),h=Math.max(…s.map(c=>c.high)),l=Math.min(…s.map(c=>c.low)),cl=ca[ca.length-1].close;const k=((cl-l)/(h-l||0.0001))*100;return{k,d:k*0.8};}
+function calcATR(ca,p=14){if(ca.length<p+1)return 0.001;let s=0;for(let i=ca.length-p;i<ca.length;i++){const c=ca[i],pr=ca[i-1];s+=Math.max(c.high-c.low,Math.abs(c.high-pr.close),Math.abs(c.low-pr.close));}return s/p;}
+function calcWR(ca,p=14){if(ca.length<p)return-50;const s=ca.slice(-p),h=Math.max(…s.map(c=>c.high)),l=Math.min(…s.map(c=>c.low)),cl=ca[ca.length-1].close;return((h-cl)/(h-l||0.0001))*-100;}
+function calcSMA(c,p){if(c.length<p)return c[c.length-1]||0;return c.slice(-p).reduce((a,b)=>a+b,0)/p;}
 
+// ============================================================
 // PATTERNS
-function detectPatterns(cArr){
-if(cArr.length<3)return[];
-const pats=[],c1=cArr[cArr.length-3],c2=cArr[cArr.length-2],c3=cArr[cArr.length-1];
+// ============================================================
+function detectPatterns(ca){
+if(ca.length<3)return[];
+const p=[],c1=ca[ca.length-3],c2=ca[ca.length-2],c3=ca[ca.length-1];
 const b3=Math.abs(c3.close-c3.open),r3=c3.high-c3.low||0.0001,b2=Math.abs(c2.close-c2.open),r2=c2.high-c2.low||0.0001;
 const uw=c3.high-Math.max(c3.open,c3.close),lw=Math.min(c3.open,c3.close)-c3.low;
-if(b3/r3<0.1)pats.push({name:‘Doji’,type:‘neutral’});
-if(lw>b3*2&&uw<b3*0.5&&c3.close>c3.open)pats.push({name:‘Hammer’,type:‘bull’});
-if(uw>b3*2&&lw<b3*0.5&&c3.close<c3.open)pats.push({name:‘Shooting Star’,type:‘bear’});
-if(c2.close<c2.open&&c3.close>c3.open&&c3.open<c2.close&&c3.close>c2.open)pats.push({name:‘Bullish Engulfing’,type:‘bull’});
-if(c2.close>c2.open&&c3.close<c3.open&&c3.open>c2.close&&c3.close<c2.open)pats.push({name:‘Bearish Engulfing’,type:‘bear’});
-if(c1.close<c1.open&&b2/r2<0.3&&c3.close>c3.open&&c3.close>(c1.open+c1.close)/2)pats.push({name:‘Morning Star’,type:‘bull’});
-if(c1.close>c1.open&&b2/r2<0.3&&c3.close<c3.open&&c3.close<(c1.open+c1.close)/2)pats.push({name:‘Evening Star’,type:‘bear’});
-if(lw>r3*0.6&&b3<r3*0.3)pats.push({name:‘Bullish Pinbar’,type:‘bull’});
-if(uw>r3*0.6&&b3<r3*0.3)pats.push({name:‘Bearish Pinbar’,type:‘bear’});
-if(c3.close>c3.open&&b3/r3>0.7)pats.push({name:‘Strong Bull’,type:‘bull’});
-if(c3.close<c3.open&&b3/r3>0.7)pats.push({name:‘Strong Bear’,type:‘bear’});
-return pats;
+if(b3/r3<0.1)p.push({name:‘Doji’,type:‘neutral’});
+if(lw>b3*2&&uw<b3*0.5&&c3.close>c3.open)p.push({name:‘Hammer’,type:‘bull’});
+if(uw>b3*2&&lw<b3*0.5&&c3.close<c3.open)p.push({name:‘Shooting Star’,type:‘bear’});
+if(c2.close<c2.open&&c3.close>c3.open&&c3.open<c2.close&&c3.close>c2.open)p.push({name:‘Bullish Engulfing’,type:‘bull’});
+if(c2.close>c2.open&&c3.close<c3.open&&c3.open>c2.close&&c3.close<c2.open)p.push({name:‘Bearish Engulfing’,type:‘bear’});
+if(c1.close<c1.open&&b2/r2<0.3&&c3.close>c3.open&&c3.close>(c1.open+c1.close)/2)p.push({name:‘Morning Star’,type:‘bull’});
+if(c1.close>c1.open&&b2/r2<0.3&&c3.close<c3.open&&c3.close<(c1.open+c1.close)/2)p.push({name:‘Evening Star’,type:‘bear’});
+if(lw>r3*0.6&&b3<r3*0.3)p.push({name:‘Bullish Pinbar’,type:‘bull’});
+if(uw>r3*0.6&&b3<r3*0.3)p.push({name:‘Bearish Pinbar’,type:‘bear’});
+if(c3.close>c3.open&&b3/r3>0.7)p.push({name:‘Strong Bull’,type:‘bull’});
+if(c3.close<c3.open&&b3/r3>0.7)p.push({name:‘Strong Bear’,type:‘bear’});
+return p;
 }
 
+// ============================================================
 // MTF
-function getMTF(closes,cArr,factor){
+// ============================================================
+function getMTF(closes,factor){
 const sc=closes.filter((_,i)=>i%factor===0);
 if(sc.length<15)return{dir:‘WAIT’,conf:0};
-const rsi=calcRSI(sc),macd=calcMACD(sc),ema9=calcEMA(sc,9),ema21=calcEMA(sc,21),price=sc[sc.length-1];
-let bulls=0,bears=0;
-if(rsi<45)bulls++;else if(rsi>55)bears++;
-if(macd.hist>0)bulls++;else if(macd.hist<0)bears++;
-if(price>ema9&&ema9>ema21)bulls++;else if(price<ema9&&ema9<ema21)bears++;
-if(bulls>=2&&bulls>bears)return{dir:‘BUY’,conf:Math.round((bulls/3)*100)};
-if(bears>=2&&bears>bulls)return{dir:‘SELL’,conf:Math.round((bears/3)*100)};
+const rsi=calcRSI(sc),macd=calcMACD(sc),e9=calcEMA(sc,9),e21=calcEMA(sc,21),price=sc[sc.length-1];
+let b=0,br=0;
+if(rsi<45)b++;else if(rsi>55)br++;
+if(macd.hist>0)b++;else if(macd.hist<0)br++;
+if(price>e9&&e9>e21)b++;else if(price<e9&&e9<e21)br++;
+if(b>=2&&b>br)return{dir:‘BUY’,conf:Math.round((b/3)*100)};
+if(br>=2&&br>b)return{dir:‘SELL’,conf:Math.round((br/3)*100)};
 return{dir:‘WAIT’,conf:0};
 }
-function updateMTF(closes,cArr){
-const m1=getMTF(closes,cArr,1),m5=getMTF(closes,cArr,3),m15=getMTF(closes,cArr,5);
+function updateMTF(closes){
+const m1=getMTF(closes,1),m5=getMTF(closes,3),m15=getMTF(closes,5);
 [[‘m1’,m1],[‘m5’,m5],[‘m15’,m15]].forEach(([tf,sig])=>{
 document.getElementById(`mtf-${tf}`).className=`mtf-item ${sig.dir==='BUY'?'bull':sig.dir==='SELL'?'bear':''}`;
 const se=document.getElementById(`mtf-${tf}-sig`);se.textContent=sig.dir;se.className=`mtf-signal ${sig.dir==='BUY'?'bull':sig.dir==='SELL'?'bear':'neutral'}`;
@@ -409,27 +475,31 @@ document.getElementById(`mtf-${tf}-conf`).textContent=sig.conf>0?sig.conf+’%�
 return{m1,m5,m15};
 }
 
+// ============================================================
 // CONFLUENCE
-function runConfluence(price,closes,cArr){
-const sigs=[],rsi=calcRSI(closes),macd=calcMACD(closes),bb=calcBB(closes),stoch=calcStoch(cArr),wr=calcWR(cArr),atr=calcATR(cArr);
-const sma100=calcSMA(closes,100),ema9=calcEMA(closes,9),ema21=calcEMA(closes,21),ema50=calcEMA(closes,50);
+// ============================================================
+function runConfluence(price,closes,ca){
+const sigs=[],rsi=calcRSI(closes),macd=calcMACD(closes),bb=calcBB(closes),stoch=calcStoch(ca),wr=calcWR(ca),atr=calcATR(ca);
+const sma100=calcSMA(closes,100),e9=calcEMA(closes,9),e21=calcEMA(closes,21),e50=calcEMA(closes,50);
 if(rsi<40)sigs.push(‘bull’);else if(rsi>60)sigs.push(‘bear’);else sigs.push(‘neutral’);
 if(macd.hist>0&&macd.macd>macd.signal)sigs.push(‘bull’);else if(macd.hist<0&&macd.macd<macd.signal)sigs.push(‘bear’);else sigs.push(‘neutral’);
 if(price<bb.lower)sigs.push(‘bull’);else if(price>bb.upper)sigs.push(‘bear’);else sigs.push(‘neutral’);
 if(stoch.k<25&&stoch.k>stoch.d)sigs.push(‘bull’);else if(stoch.k>75&&stoch.k<stoch.d)sigs.push(‘bear’);else sigs.push(‘neutral’);
 if(wr<-80)sigs.push(‘bull’);else if(wr>-20)sigs.push(‘bear’);else sigs.push(‘neutral’);
-if(ema9&&ema21&&ema50&&ema9>ema21&&ema21>ema50&&price>ema9)sigs.push(‘bull’);else if(ema9&&ema21&&ema50&&ema9<ema21&&ema21<ema50&&price<ema9)sigs.push(‘bear’);else sigs.push(‘neutral’);
+if(e9&&e21&&e50&&e9>e21&&e21>e50&&price>e9)sigs.push(‘bull’);else if(e9&&e21&&e50&&e9<e21&&e21<e50&&price<e9)sigs.push(‘bear’);else sigs.push(‘neutral’);
 if(price>sma100)sigs.push(‘bull’);else if(price<sma100)sigs.push(‘bear’);else sigs.push(‘neutral’);
-const tenkan=closes.length>=9?(Math.max(…closes.slice(-9))+Math.min(…closes.slice(-9)))/2:price;
-const kijun=closes.length>=26?(Math.max(…closes.slice(-26))+Math.min(…closes.slice(-26)))/2:price;
-if(price>tenkan&&tenkan>kijun)sigs.push(‘bull’);else if(price<tenkan&&tenkan<kijun)sigs.push(‘bear’);else sigs.push(‘neutral’);
-const last3=cArr.slice(-3),bOB=last3.some(c=>(c.close-c.open)/(c.high-c.low||0.0001)>0.7&&c.close>c.open),bearOB=last3.some(c=>(c.open-c.close)/(c.high-c.low||0.0001)>0.7&&c.close<c.open);
-if(bOB&&!bearOB)sigs.push(‘bull’);else if(bearOB&&!bOB)sigs.push(‘bear’);else sigs.push(‘neutral’);
-if(cArr.length>=3){const c1=cArr[cArr.length-3],c3=cArr[cArr.length-1];if(c3.low>c1.high)sigs.push(‘bull’);else if(c3.high<c1.low)sigs.push(‘bear’);else sigs.push(‘neutral’);}else sigs.push(‘neutral’);
-return{signals:sigs,bulls:sigs.filter(s=>s===‘bull’).length,bears:sigs.filter(s=>s===‘bear’).length,rsi,macd,atr,stoch,bb,ema9,ema21};
+const tk=closes.length>=9?(Math.max(…closes.slice(-9))+Math.min(…closes.slice(-9)))/2:price;
+const kj=closes.length>=26?(Math.max(…closes.slice(-26))+Math.min(…closes.slice(-26)))/2:price;
+if(price>tk&&tk>kj)sigs.push(‘bull’);else if(price<tk&&tk<kj)sigs.push(‘bear’);else sigs.push(‘neutral’);
+const l3=ca.slice(-3),bOB=l3.some(c=>(c.close-c.open)/(c.high-c.low||0.0001)>0.7&&c.close>c.open),brOB=l3.some(c=>(c.open-c.close)/(c.high-c.low||0.0001)>0.7&&c.close<c.open);
+if(bOB&&!brOB)sigs.push(‘bull’);else if(brOB&&!bOB)sigs.push(‘bear’);else sigs.push(‘neutral’);
+if(ca.length>=3){const c1=ca[ca.length-3],c3=ca[ca.length-1];if(c3.low>c1.high)sigs.push(‘bull’);else if(c3.high<c1.low)sigs.push(‘bear’);else sigs.push(‘neutral’);}else sigs.push(‘neutral’);
+return{signals:sigs,bulls:sigs.filter(s=>s===‘bull’).length,bears:sigs.filter(s=>s===‘bear’).length,rsi,macd,atr,stoch,bb,ema9:e9,ema21:e21};
 }
 
+// ============================================================
 // SIGNAL
+// ============================================================
 function generateSignal(cf,price,mtf,patterns){
 let bB=cf.bulls,bBr=cf.bears;
 bB+=patterns.filter(p=>p.type===‘bull’).length*0.5;
@@ -445,11 +515,13 @@ if(newsActive&&dir!==‘WAIT’){dir=‘WAIT’;conf=0;}
 let quality=‘C’;
 if(conf>=75&&(mtfB>=2||mtfBr>=2))quality=‘A’;
 else if(conf>=60)quality=‘B’;
-const tp=cf.atr*1.5,sl=cf.atr*1.0;
+const tp=cf.atr*1.5,sl=cf.atr;
 return{direction:dir,confidence:conf,tpPrice:dir===‘BUY’?price+tp:dir===‘SELL’?price-tp:price+tp,slPrice:dir===‘BUY’?price-sl:dir===‘SELL’?price+sl:price-sl,rr:(tp/sl).toFixed(2),quality};
 }
 
+// ============================================================
 // WIN RATE
+// ============================================================
 function updateWinRate(){
 const{wins,losses,pending,totalPips,confidenceSum,signalCount}=winRateData;
 const comp=wins+losses,wp=comp>0?Math.round((wins/comp)*100):0,lp=comp>0?Math.round((losses/comp)*100):0,ac=signalCount>0?Math.round(confidenceSum/signalCount):0;
@@ -462,15 +534,15 @@ document.getElementById(‘winPct2’).textContent=`Wins ${wp}%`;document.getEle
 const pe2=document.getElementById(‘totalPips’);pe2.textContent=(totalPips>=0?’+’:’’)+totalPips.toFixed(1)+’ pips’;pe2.className=`pip-value ${totalPips>=0?'positive':'negative'}`;
 document.getElementById(‘avgConf’).textContent=ac>0?ac+’%’:’—’;
 const ge=document.getElementById(‘perfGrade’);
-if(comp<5){ge.textContent=‘⏳ NEED MORE DATA — Keep Running’;ge.className=‘performance-grade grade-c’;}
-else if(wp>=65&&totalPips>0){ge.textContent=‘⭐ GRADE A — Excellent Strategy’;ge.className=‘performance-grade grade-a’;}
+if(comp<5){ge.textContent=‘⏳ NEED MORE DATA’;ge.className=‘performance-grade grade-c’;}
+else if(wp>=65&&totalPips>0){ge.textContent=‘⭐ GRADE A — Excellent’;ge.className=‘performance-grade grade-a’;}
 else if(wp>=55&&totalPips>0){ge.textContent=‘✓ GRADE B — Good Strategy’;ge.className=‘performance-grade grade-b’;}
-else if(wp>=45){ge.textContent=‘⚠ GRADE C — Needs Improvement’;ge.className=‘performance-grade grade-c’;}
+else if(wp>=45){ge.textContent=‘⚠ GRADE C — Needs Work’;ge.className=‘performance-grade grade-c’;}
 else{ge.textContent=‘✗ GRADE D — Do Not Trade Live’;ge.className=‘performance-grade grade-d’;}
 }
 
 function resolveSignals(price,atr){
-const tp=atr*10000*1.5,sl=atr*10000*1.0;
+const tp=atr*10000*1.5,sl=atr*10000;
 signalHistory.forEach(h=>{
 if(h.result!==‘pending’)return;
 const moved=(price-parseFloat(h.price))*10000;
@@ -501,7 +573,9 @@ if(!signalHistory.length){list.innerHTML=’<div style="color:var(--muted);font-
 list.innerHTML=signalHistory.slice(0,15).map(h=>`<div class="history-item"><span class="hist-signal ${h.dir.toLowerCase()}">${h.dir}</span><span class="hist-time">${h.time}</span><span class="hist-conf">${h.conf}% ${h.quality||''}</span><span class="hist-result ${h.result}">${h.result==='pending'?'⏳':h.result==='win'?'✓ WIN':'✗ LOSS'}</span></div>`).join(’’);
 }
 
+// ============================================================
 // UI UPDATE
+// ============================================================
 function updateUI(price,signal,cf,patterns){
 document.getElementById(‘priceMain’).textContent=price.toFixed(5);
 const ch=price-prevPrice,cp=prevPrice?((ch/prevPrice)*100).toFixed(4):‘0.0000’;
@@ -515,8 +589,7 @@ const mh=cf.macd.hist;
 document.getElementById(‘macdVal’).textContent=(mh*10000).toFixed(2);document.getElementById(‘macdVal’).className=`ind-value ${mh>0?'bull':mh<0?'bear':'neutral'}`;
 document.getElementById(‘macdState’).textContent=mh>0?‘BULLISH’:mh<0?‘BEARISH’:‘FLAT’;document.getElementById(‘macdState’).className=`ind-state ${mh>0?'bull':mh<0?'bear':'neutral'}`;
 document.getElementById(‘atrVal’).textContent=(cf.atr*10000).toFixed(1);document.getElementById(‘atrState’).textContent=cf.atr>0.0012?‘HIGH VOL’:‘LOW VOL’;document.getElementById(‘atrState’).className=`ind-state ${cf.atr>0.0012?'neutral':'bull'}`;
-const pl=document.getElementById(‘patternList’);
-pl.innerHTML=patterns.length?patterns.map(p=>`<span class="pattern-tag ${p.type}">${p.name}</span>`).join(’’):’<span class="no-pattern">No patterns detected</span>’;
+document.getElementById(‘patternList’).innerHTML=patterns.length?patterns.map(p=>`<span class="pattern-tag ${p.type}">${p.name}</span>`).join(’’):’<span class="no-pattern">No patterns detected</span>’;
 const card=document.getElementById(‘signalCard’),main=document.getElementById(‘signalMain’),conf=document.getElementById(‘signalConf’),fill=document.getElementById(‘confFill’),qe=document.getElementById(‘signalQuality’);
 if(newsActive&&signal.direction===‘WAIT’){card.className=‘signal-card news-block’;main.className=‘signal-main news-text’;main.textContent=‘NEWS — NO TRADE’;}
 else{card.className=`signal-card ${signal.direction.toLowerCase()}`;main.className=`signal-main ${signal.direction.toLowerCase()}`;main.textContent=signal.direction;}
@@ -559,25 +632,60 @@ ctx.fillStyle=bull?’#00ff9f’:’#ff3366’;const top=toY(Math.max(c.open,c.c
 
 function updateCountdown(){const m5=5*60*1000,r=m5-(Date.now()%m5),mins=Math.floor(r/60000),secs=Math.floor((r%60000)/1000);document.getElementById(‘countdown’).textContent=`M5: ${mins}:${secs.toString().padStart(2,'0')}`;}
 
+// ============================================================
+// MAIN — INSTANT START, NO WAITING
+// ============================================================
 async function runAnalysis(){
-document.getElementById(‘signalMain’).classList.add(‘loading’);
 checkNews();
+
+// Start with simulated price immediately so bot never stalls
+if(candles.length<10){
+const startPrice=currentPrice||EURUSD_BASE;
+simPrice=startPrice;
+seedCandles(startPrice);
+}
+
+// Try to get real price (with timeout — won’t block UI)
 const price=await fetchPrice();
-if(!price){document.getElementById(‘signalMain’).textContent=‘NO DATA’;document.getElementById(‘signalMain’).classList.remove(‘loading’);return;}
-if(candles.length<10)seedCandles(price);
-buildCandle(price);
-const closes=candles.map(c=>c.close),cf=runConfluence(price,closes,candles),mtf=updateMTF(closes,candles),patterns=detectPatterns(candles),signal=generateSignal(cf,price,mtf,patterns);
-prevPrice=currentPrice||price;currentPrice=price;
-updateUI(price,signal,cf,patterns);
-addHistory(signal,price,cf.atr);
-document.getElementById(‘signalMain’).classList.remove(‘loading’);
+const finalPrice=price||getSimulatedPrice();
+
+buildCandle(finalPrice);
+const closes=candles.map(c=>c.close),cf=runConfluence(finalPrice,closes,candles),mtf=updateMTF(closes),patterns=detectPatterns(candles),signal=generateSignal(cf,finalPrice,mtf,patterns);
+prevPrice=currentPrice||finalPrice;currentPrice=finalPrice;
+updateUI(finalPrice,signal,cf,patterns);
+addHistory(signal,finalPrice,cf.atr);
 document.getElementById(‘statusDot’).style.background=’#00ff9f’;
 setTimeout(()=>document.getElementById(‘statusDot’).style.background=’’,500);
 }
 
-loadData();updateWinRate();renderHistory();runAnalysis();
-setInterval(runAnalysis,30000);setInterval(updateCountdown,1000);setInterval(drawChart,5000);setInterval(checkNews,60000);
+// ============================================================
+// INIT — starts immediately without waiting for API
+// ============================================================
+loadData();
+updateWinRate();
+renderHistory();
 updateCountdown();
+
+// Run analysis immediately with simulated data
+const startPrice=EURUSD_BASE;
+simPrice=startPrice;
+seedCandles(startPrice);
+const closes=candles.map(c=>c.close);
+const cf=runConfluence(startPrice,closes,candles);
+const mtf=updateMTF(closes);
+const patterns=detectPatterns(candles);
+const signal=generateSignal(cf,startPrice,mtf,patterns);
+currentPrice=startPrice;
+updateUI(startPrice,signal,cf,patterns);
+
+// Then fetch real price in background
+runAnalysis();
+
+// Keep updating
+setInterval(runAnalysis,30000);
+setInterval(updateCountdown,1000);
+setInterval(drawChart,5000);
+setInterval(checkNews,60000);
 </script>
 
 </body>
