@@ -436,6 +436,164 @@ transition: all 0.3s ease;
 @keyframes blink { 0%,100%{opacity:1} 50%{opacity:0.3} }
 
 .error-msg { color: var(–red); font-size: 12px; text-align: center; padding: 8px; }
+
+/* WIN RATE TRACKER */
+.winrate-card {
+background: var(–surface);
+border: 1px solid var(–border);
+border-radius: 12px;
+padding: 16px 18px;
+margin-bottom: 10px;
+position: relative;
+overflow: hidden;
+}
+
+.winrate-card::before {
+content: ‘’;
+position: absolute;
+top: 0; left: 0; right: 0;
+height: 2px;
+background: linear-gradient(90deg, var(–buy), var(–accent), var(–sell));
+}
+
+.winrate-title {
+font-size: 11px;
+color: var(–muted);
+letter-spacing: 2px;
+text-transform: uppercase;
+margin-bottom: 14px;
+display: flex;
+justify-content: space-between;
+align-items: center;
+}
+
+.winrate-badge {
+font-family: ‘Space Mono’, monospace;
+font-size: 10px;
+padding: 3px 8px;
+border-radius: 4px;
+background: rgba(0,212,255,0.1);
+color: var(–accent);
+border: 1px solid rgba(0,212,255,0.2);
+}
+
+.winrate-main {
+display: flex;
+align-items: center;
+justify-content: center;
+margin-bottom: 14px;
+}
+
+.winrate-circle {
+width: 100px;
+height: 100px;
+border-radius: 50%;
+display: flex;
+flex-direction: column;
+align-items: center;
+justify-content: center;
+border: 3px solid var(–border);
+position: relative;
+background: var(–surface2);
+}
+
+.winrate-pct {
+font-family: ‘Space Mono’, monospace;
+font-size: 24px;
+font-weight: 700;
+line-height: 1;
+}
+
+.winrate-pct.good { color: var(–buy); }
+.winrate-pct.bad { color: var(–sell); }
+.winrate-pct.neutral { color: var(–yellow); }
+
+.winrate-label { font-size: 10px; color: var(–muted); margin-top: 2px; }
+
+.winrate-stats {
+display: grid;
+grid-template-columns: repeat(4, 1fr);
+gap: 8px;
+margin-bottom: 12px;
+}
+
+.wstat {
+background: var(–surface2);
+border-radius: 8px;
+padding: 8px;
+text-align: center;
+}
+
+.wstat-label { font-size: 10px; color: var(–muted); text-transform: uppercase; letter-spacing: 1px; }
+.wstat-value { font-family: ‘Space Mono’, monospace; font-size: 14px; margin-top: 4px; font-weight: 700; }
+.wstat-value.green { color: var(–buy); }
+.wstat-value.red { color: var(–sell); }
+.wstat-value.blue { color: var(–accent); }
+.wstat-value.yellow { color: var(–yellow); }
+
+.winrate-bar-wrap { margin-bottom: 10px; }
+.winrate-bar-label {
+display: flex;
+justify-content: space-between;
+font-size: 11px;
+color: var(–muted);
+margin-bottom: 4px;
+}
+
+.winrate-bar {
+height: 8px;
+background: var(–border);
+border-radius: 4px;
+overflow: hidden;
+display: flex;
+}
+
+.winrate-bar-win {
+height: 100%;
+background: var(–buy);
+border-radius: 4px 0 0 4px;
+transition: width 0.8s ease;
+}
+
+.winrate-bar-loss {
+height: 100%;
+background: var(–sell);
+border-radius: 0 4px 4px 0;
+transition: width 0.8s ease;
+}
+
+.pip-tracker {
+display: flex;
+justify-content: space-between;
+align-items: center;
+padding: 10px 0;
+border-top: 1px solid var(–border);
+margin-top: 4px;
+}
+
+.pip-label { font-size: 12px; color: var(–muted); }
+.pip-value {
+font-family: ‘Space Mono’, monospace;
+font-size: 16px;
+font-weight: 700;
+}
+.pip-value.positive { color: var(–buy); }
+.pip-value.negative { color: var(–sell); }
+
+.performance-grade {
+text-align: center;
+padding: 8px;
+border-radius: 8px;
+font-size: 13px;
+font-weight: 700;
+letter-spacing: 2px;
+margin-top: 8px;
+}
+
+.grade-a { background: rgba(0,255,159,0.1); color: var(–buy); border: 1px solid rgba(0,255,159,0.3); }
+.grade-b { background: rgba(0,212,255,0.1); color: var(–accent); border: 1px solid rgba(0,212,255,0.3); }
+.grade-c { background: rgba(255,215,0,0.1); color: var(–yellow); border: 1px solid rgba(255,215,0,0.3); }
+.grade-d { background: rgba(255,51,102,0.1); color: var(–sell); border: 1px solid rgba(255,51,102,0.3); }
 </style>
 
 </head>
@@ -575,6 +733,67 @@ transition: all 0.3s ease;
   <!-- REFRESH -->
 
 <button class="refresh-btn" onclick="runAnalysis()">⟳ REFRESH ANALYSIS</button>
+
+  <!-- WIN RATE TRACKER -->
+
+  <div class="winrate-card">
+    <div class="winrate-title">
+      <span>Win Rate Tracker</span>
+      <span class="winrate-badge" id="sessionCount">0 SIGNALS</span>
+    </div>
+
+```
+<div class="winrate-main">
+  <div class="winrate-circle">
+    <div class="winrate-pct neutral" id="winratePct">—</div>
+    <div class="winrate-label">WIN RATE</div>
+  </div>
+</div>
+
+<div class="winrate-stats">
+  <div class="wstat">
+    <div class="wstat-label">Wins</div>
+    <div class="wstat-value green" id="totalWins">0</div>
+  </div>
+  <div class="wstat">
+    <div class="wstat-label">Losses</div>
+    <div class="wstat-value red" id="totalLosses">0</div>
+  </div>
+  <div class="wstat">
+    <div class="wstat-label">Pending</div>
+    <div class="wstat-value yellow" id="totalPending">0</div>
+  </div>
+  <div class="wstat">
+    <div class="wstat-label">Total</div>
+    <div class="wstat-value blue" id="totalSignals">0</div>
+  </div>
+</div>
+
+<div class="winrate-bar-wrap">
+  <div class="winrate-bar-label">
+    <span id="winPct2">Wins 0%</span>
+    <span id="lossPct2">Losses 0%</span>
+  </div>
+  <div class="winrate-bar">
+    <div class="winrate-bar-win" id="winBar" style="width:0%"></div>
+    <div class="winrate-bar-loss" id="lossBar" style="width:0%"></div>
+  </div>
+</div>
+
+<div class="pip-tracker">
+  <div class="pip-label">Total Pips P&L</div>
+  <div class="pip-value" id="totalPips">0.0 pips</div>
+</div>
+
+<div class="pip-tracker" style="border-top:none;padding-top:0">
+  <div class="pip-label">Avg Confidence</div>
+  <div class="pip-value blue" id="avgConf">—</div>
+</div>
+
+<div class="performance-grade grade-c" id="perfGrade">AWAITING DATA</div>
+```
+
+  </div>
 
   <!-- HISTORY -->
 
@@ -1061,9 +1280,80 @@ function updateCountdown() {
 }
 
 // ============================================================
+// WIN RATE TRACKER
+// ============================================================
+let winRateData = { wins: 0, losses: 0, pending: 0, totalPips: 0, confidenceSum: 0, signalCount: 0 };
+
+function updateWinRate() {
+  const { wins, losses, pending, totalPips, confidenceSum, signalCount } = winRateData;
+  const completed = wins + losses;
+  const winPct = completed > 0 ? Math.round((wins / completed) * 100) : 0;
+  const lossPct = completed > 0 ? Math.round((losses / completed) * 100) : 0;
+  const avgConf = signalCount > 0 ? Math.round(confidenceSum / signalCount) : 0;
+
+  const pctEl = document.getElementById('winratePct');
+  pctEl.textContent = completed > 0 ? winPct + '%' : '—';
+  pctEl.className = `winrate-pct ${winPct >= 60 ? 'good' : winPct >= 45 ? 'neutral' : 'bad'}`;
+
+  document.getElementById('totalWins').textContent = wins;
+  document.getElementById('totalLosses').textContent = losses;
+  document.getElementById('totalPending').textContent = pending;
+  document.getElementById('totalSignals').textContent = signalCount;
+  document.getElementById('sessionCount').textContent = signalCount + ' SIGNALS';
+
+  document.getElementById('winBar').style.width = (completed > 0 ? winPct : 0) + '%';
+  document.getElementById('lossBar').style.width = (completed > 0 ? lossPct : 0) + '%';
+  document.getElementById('winPct2').textContent = `Wins ${winPct}%`;
+  document.getElementById('lossPct2').textContent = `Losses ${lossPct}%`;
+
+  const pipEl = document.getElementById('totalPips');
+  pipEl.textContent = (totalPips >= 0 ? '+' : '') + totalPips.toFixed(1) + ' pips';
+  pipEl.className = `pip-value ${totalPips >= 0 ? 'positive' : 'negative'}`;
+
+  document.getElementById('avgConf').textContent = avgConf > 0 ? avgConf + '%' : '—';
+
+  const gradeEl = document.getElementById('perfGrade');
+  if (completed < 5) {
+    gradeEl.textContent = '⏳ NEED MORE DATA — Keep Running';
+    gradeEl.className = 'performance-grade grade-c';
+  } else if (winPct >= 65 && totalPips > 0) {
+    gradeEl.textContent = '⭐ GRADE A — Excellent Strategy';
+    gradeEl.className = 'performance-grade grade-a';
+  } else if (winPct >= 55 && totalPips > 0) {
+    gradeEl.textContent = '✓ GRADE B — Good Strategy';
+    gradeEl.className = 'performance-grade grade-b';
+  } else if (winPct >= 45) {
+    gradeEl.textContent = '⚠ GRADE C — Needs Improvement';
+    gradeEl.className = 'performance-grade grade-c';
+  } else {
+    gradeEl.textContent = '✗ GRADE D — Do Not Trade Live';
+    gradeEl.className = 'performance-grade grade-d';
+  }
+}
+
+function resolveSignals(currentPrice, atr) {
+  const tpPips = atr * 10000 * 1.5;
+  const slPips = atr * 10000 * 1.0;
+  signalHistory.forEach(h => {
+    if (h.result !== 'pending') return;
+    const entryPrice = parseFloat(h.price);
+    const moved = (currentPrice - entryPrice) * 10000;
+    if (h.dir === 'BUY') {
+      if (moved >= tpPips) { h.result = 'win'; winRateData.wins++; winRateData.totalPips += tpPips; winRateData.pending = Math.max(0, winRateData.pending-1); }
+      else if (moved <= -slPips) { h.result = 'loss'; winRateData.losses++; winRateData.totalPips -= slPips; winRateData.pending = Math.max(0, winRateData.pending-1); }
+    } else if (h.dir === 'SELL') {
+      if (moved <= -tpPips) { h.result = 'win'; winRateData.wins++; winRateData.totalPips += tpPips; winRateData.pending = Math.max(0, winRateData.pending-1); }
+      else if (moved >= slPips) { h.result = 'loss'; winRateData.losses++; winRateData.totalPips -= slPips; winRateData.pending = Math.max(0, winRateData.pending-1); }
+    }
+  });
+  updateWinRate();
+}
+
+// ============================================================
 // HISTORY
 // ============================================================
-function addHistory(signal, price) {
+function addHistory(signal, price, atr) {
+  resolveSignals(price, atr);
   if (signal.direction === 'WAIT') return;
   const now = new Date().toLocaleTimeString('en', {hour:'2-digit', minute:'2-digit'});
   signalHistory.unshift({
@@ -1071,20 +1361,14 @@ function addHistory(signal, price) {
     time: now,
     conf: signal.confidence,
     price: price.toFixed(5),
+    atr: atr,
     result: 'pending'
   });
-  if (signalHistory.length > 10) signalHistory.pop();
-
-  // Mark old as win/loss based on price movement
-  if (signalHistory.length > 2) {
-    const prev = signalHistory[2];
-    if (prev.result === 'pending') {
-      const pPrice = parseFloat(prev.price);
-      if (prev.dir === 'BUY') prev.result = price > pPrice ? 'win' : 'loss';
-      else prev.result = price < pPrice ? 'win' : 'loss';
-    }
-  }
-
+  if (signalHistory.length > 20) signalHistory.pop();
+  winRateData.pending++;
+  winRateData.signalCount++;
+  winRateData.confidenceSum += signal.confidence;
+  updateWinRate();
   renderHistory();
 }
 
@@ -1129,7 +1413,7 @@ async function runAnalysis() {
   currentPrice = price;
 
   updateUI(price, signal, confluence);
-  addHistory(signal, price);
+  addHistory(signal, price, confluence.atr);
 
   document.getElementById('signalMain').classList.remove('loading');
   document.getElementById('statusDot').style.background = '#00ff9f';
